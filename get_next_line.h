@@ -16,9 +16,14 @@
 #  define BUFFER_SIZE 3
 # endif
 
-#include <unistd.h>
-#include <stdlib.h>
+# include <unistd.h>
+# include <stdlib.h>
 
-char *get_next_line(int fd);
+char	*get_next_line(int fd);
+char	*copy_buffer_to_stash(char *stash, char *buffer, ssize_t btr);
+char	*extract_line(char *stash);
+int		check_nl(char *str, int len);
+int		calc_len(char *line);
+char	*ft_strdup(const char *src);
 
 #endif
