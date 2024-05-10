@@ -19,32 +19,34 @@ char	*get_next_line(int fd)
 	char		*line;
 	char		*temp_stash;
 
-	b_read = 0;
 	if (fd < 0 || BUFFER_SIZE <= 0 || BUFFER_SIZE > INT_MAX)
 		return (NULL);
-	while (!check_nl(buffer, b_read) && !check_nl(stash, calc_len(stash)))
+	b_read = 1;
+	while (b_read)
 	{
 		b_read = read(fd, buffer, BUFFER_SIZE);
-		if (b_read == -1)
+		if (b_read <= 0)
 		{
+			if (stash && *stash)
+			{
+				line = extract_line(stash);
+				temp_stash = stash;
+				stash = ft_strdup(stash + calc_len(line));
+				free(temp_stash);
+				return (line);
+			}
 			free(stash);
 			return (NULL);
 		}
 		stash = copy_buffer_to_stash(stash, buffer, b_read);
-		if (b_read == 0)
+		if (check_nl(stash, calc_len(stash)))
 		{
-			free(stash);
-			return (NULL);
-		}
-	}
-	if (stash)
-	{
-		line = extract_line(stash);
-		temp_stash = stash;
-		stash = ft_strdup(stash + calc_len(line));
-		free(temp_stash);
-		if (line)
+			line = extract_line(stash);
+			temp_stash = stash;
+			stash = ft_strdup(stash + calc_len(line));
+			free(temp_stash);
 			return (line);
+		}
 	}
 	return (NULL);
 }

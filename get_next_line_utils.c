@@ -6,7 +6,7 @@
 /*   By: omartela <omartela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 07:40:20 by omartela          #+#    #+#             */
-/*   Updated: 2024/05/09 08:44:55 by omartela         ###   ########.fr       */
+/*   Updated: 2024/05/10 15:40:12 by omartela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
@@ -20,13 +20,16 @@ char	*copy_buffer_to_stash(char *stash, char *buffer, ssize_t btr)
 	i = 0;
 	j = 0;
 	temp = NULL;
-	if (btr == 0)
+	if (btr <= 0)
 		return (stash);
 	while (stash != NULL && stash[i])
 		++i;
 	temp = (char *)malloc((i + btr + 1) * sizeof(char));
 	if (!temp)
+	{
+		free(stash);
 		return (NULL);
+	}
 	while (stash != NULL && stash[j])
 	{
 		temp[j] = stash[j];
@@ -49,20 +52,25 @@ char	*extract_line(char *stash)
 	i = 0;
 	j = 0;
 	if (!stash)
-		return (NULL);
+		return (free(stash), NULL);
 	while (stash[i] != '\n' && stash[i] != '\0')
 		++i;
 	if (stash[i] == '\n')
 		++i;
 	line = (char *)malloc(sizeof(char) * (i + 1));
 	if (!line)
-		return (NULL);
-	while (j < i)
 	{
-		line[j] = *stash++;
+		free(stash);
+		return (NULL);
+	}
+	while (j < i && stash[j])
+	{
+		line[j] = stash[j];
 		++j;
 	}
 	line[j] = '\0';
+	if (!*line)
+		return (free(stash), free(line), NULL);
 	return (line);
 }
 
@@ -104,6 +112,8 @@ char	*ft_strdup(const char *src)
 	size_t	len;
 
 	len = 0;
+	if (!src)
+		return (NULL);
 	while (src[len])
 		len++;
 	str = malloc(len + 1);

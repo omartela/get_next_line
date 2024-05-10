@@ -6,7 +6,7 @@
 /*   By: omartela <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 07:34:36 by omartela          #+#    #+#             */
-/*   Updated: 2024/05/08 18:14:58 by omartela         ###   ########.fr       */
+/*   Updated: 2024/05/10 13:32:15 by omartela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # endif
 
 # include <unistd.h>
+# include <limits.h>
 # include <stdlib.h>
 
 char	*get_next_line(int fd);
