@@ -27,6 +27,8 @@ char	*get_next_line(int fd)
 		b_read = read(fd, buffer, BUFFER_SIZE);
 		if (b_read <= 0)
 		{
+			if (b_read == -1)
+				return (free(stash), NULL);
 			if (stash && *stash)
 			{
 				line = extract_line(stash);
