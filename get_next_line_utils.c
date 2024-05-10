@@ -22,8 +22,7 @@ char	*copy_buffer_to_stash(char *stash, char *buffer, ssize_t btr)
 	temp = NULL;
 	if (btr <= 0)
 		return (stash);
-	while (stash != NULL && stash[i])
-		++i;
+	i = calc_len(stash);
 	temp = (char *)malloc((i + btr + 1) * sizeof(char));
 	if (!temp)
 	{
