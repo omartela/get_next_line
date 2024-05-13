@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
     // Read lines from the file until end of file
     while ((line = get_next_line(fd)) != NULL) {
         printf("tulostaa rivin\n");
-        printf("%s\n", line);
+        printf("%s", line);
         free(line);
     }
 
