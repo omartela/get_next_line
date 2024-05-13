@@ -6,18 +6,34 @@
 /*   By: omartela <omartela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 07:39:06 by omartela          #+#    #+#             */
-/*   Updated: 2024/05/10 15:59:40 by omartela         ###   ########.fr       */
+/*   Updated: 2024/05/13 12:42:40 by omartela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
 
+char	*free_variable(char *var)
+{
+	free(var);
+	return (NULL);
+}
+
+static char	*rem_line_from_stash(char *stash, char *line)
+{
+	char	*temp_stash;
+
+	temp_stash = stash;
+	stash = ft_strdup(stash + calc_len(line));
+	free(temp_stash);
+	temp_stash = NULL;
+	return (stash);
+}
+
 char	*get_next_line(int fd)
 {
-	static char	*stash = NULL;
-	char		buffer[BUFFER_SIZE];
-	int			b_read;
+	static char	*stash;
+	char		buffer[BUFFER_SIZE + 1];
+	ssize_t		b_read;
 	char		*line;
-	char		*temp_stash;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || BUFFER_SIZE > INT_MAX)
 		return (NULL);
@@ -28,25 +44,27 @@ char	*get_next_line(int fd)
 		if (b_read <= 0)
 		{
 			if (b_read == -1)
-				return (free(stash), NULL);
+				stash = free_variable(stash);
 			if (stash && *stash)
 			{
 				line = extract_line(stash);
-				temp_stash = stash;
-				stash = ft_strdup(stash + calc_len(line));
-				free(temp_stash);
+				if (!line)
+					stash = free_variable(stash);
+				if (line)
+					stash = rem_line_from_stash(stash, line);
 				return (line);
 			}
-			free(stash);
+			stash = free_variable(stash);
 			return (NULL);
 		}
 		stash = copy_buffer_to_stash(stash, buffer, b_read);
 		if (check_nl(stash, calc_len(stash)))
 		{
 			line = extract_line(stash);
-			temp_stash = stash;
-			stash = ft_strdup(stash + calc_len(line));
-			free(temp_stash);
+			if (!line)
+				stash = free_variable(stash);
+			if (line)
+				stash = rem_line_from_stash(stash, line);
 			return (line);
 		}
 	}

@@ -26,5 +26,6 @@ char	*extract_line(char *stash);
 int		check_nl(char *str, int len);
 int		calc_len(char *line);
 char	*ft_strdup(const char *src);
+char	*free_variable(char *var);
 
 #endif
