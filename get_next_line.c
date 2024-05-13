@@ -28,6 +28,15 @@ static char	*rem_line_from_stash(char *stash, char *line)
 	return (stash);
 }
 
+static char	*update_stash(char *stash, char *line)
+{
+	if (!line)
+		stash = free_variable(stash);
+	if (line)
+		stash = rem_line_from_stash(stash, line);
+	return (stash);
+}
+
 char	*get_next_line(int fd)
 {
 	static char	*stash;
@@ -48,10 +57,7 @@ char	*get_next_line(int fd)
 			if (stash && *stash)
 			{
 				line = extract_line(stash);
-				if (!line)
-					stash = free_variable(stash);
-				if (line)
-					stash = rem_line_from_stash(stash, line);
+				stash = update_stash(stash, line);
 				return (line);
 			}
 			stash = free_variable(stash);
@@ -61,10 +67,7 @@ char	*get_next_line(int fd)
 		if (check_nl(stash, calc_len(stash)))
 		{
 			line = extract_line(stash);
-			if (!line)
-				stash = free_variable(stash);
-			if (line)
-				stash = rem_line_from_stash(stash, line);
+			stash = update_stash(stash, line);
 			return (line);
 		}
 	}
