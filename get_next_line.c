@@ -6,7 +6,7 @@
 /*   By: omartela <omartela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 07:39:06 by omartela          #+#    #+#             */
-/*   Updated: 2024/05/13 12:42:40 by omartela         ###   ########.fr       */
+/*   Updated: 2024/05/13 18:46:19 by omartela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
@@ -37,12 +37,20 @@ static char	*update_stash(char *stash, char *line)
 	return (stash);
 }
 
+static char	*get_line(char **stash)
+{
+	char	*line;
+
+	line = extract_line(*stash);
+	*stash = update_stash(*stash, line);
+	return (line);
+}
+
 char	*get_next_line(int fd)
 {
 	static char	*stash;
 	char		buffer[BUFFER_SIZE + 1];
 	ssize_t		b_read;
-	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || BUFFER_SIZE > INT_MAX)
 		return (NULL);
@@ -55,21 +63,13 @@ char	*get_next_line(int fd)
 			if (b_read == -1)
 				stash = free_variable(stash);
 			if (stash && *stash)
-			{
-				line = extract_line(stash);
-				stash = update_stash(stash, line);
-				return (line);
-			}
+				return (get_line(&stash));
 			stash = free_variable(stash);
 			return (NULL);
 		}
 		stash = copy_buffer_to_stash(stash, buffer, b_read);
 		if (check_nl(stash, calc_len(stash)))
-		{
-			line = extract_line(stash);
-			stash = update_stash(stash, line);
-			return (line);
-		}
+			return (get_line(&stash));
 	}
 	return (NULL);
 }
