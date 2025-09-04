@@ -1,0 +1,24 @@
+# Compiled executables
+get_next_line
+get_next_line_*
+*.out
+a.out
+
+# Object files
+*.o
+*.a
+
+# Test files (keep the provided test files)
+# test.txt and 1char.txt are kept as they are part of the project
+
+# Editor files
+.vscode/
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+
+# Temporary files
+/tmp/
