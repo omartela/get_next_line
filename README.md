@@ -30,7 +30,6 @@ This implementation handles:
 
 - ✅ **Memory Efficient**: Uses a configurable buffer size for optimal memory usage
 - ✅ **Line Length Agnostic**: Handles lines of any length, from single characters to very long lines
-- ✅ **Multiple File Descriptors**: Can handle multiple files simultaneously using static variables
 - ✅ **Edge Case Handling**: Properly handles empty files, files without trailing newlines, and other edge cases
 - ✅ **Memory Safe**: No memory leaks, proper cleanup on errors
 - ✅ **Configurable Buffer**: Buffer size can be defined at compile time
@@ -107,7 +106,6 @@ char *get_next_line(int fd);
 ### Important Notes
 - The caller is responsible for freeing the returned string
 - The function maintains state between calls using static variables
-- The function can handle multiple file descriptors simultaneously
 - Each line includes the terminating `\n` character, except possibly the last line
 
 ## Implementation Details
